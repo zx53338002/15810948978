@@ -2,7 +2,7 @@ import * as React from 'react'
 
 export type SelectionDirection = 'up' | 'down'
 
-interface ISelectionAction {
+interface ISelectRowAction {
   /**
    * The vertical direction use when searching for a selectable row.
    */
@@ -80,7 +80,7 @@ export type SelectionSource =
  */
 export function findNextSelectableRow(
   rowCount: number,
-  action: ISelectionAction,
+  action: ISelectRowAction,
   canSelectRow: (row: number) => boolean = row => true
 ): number | null {
   if (rowCount === 0) {
