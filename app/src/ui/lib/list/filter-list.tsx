@@ -212,7 +212,6 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
             filterText={this.props.filterText}
             disabled={this.props.disabled}
             onFilterTextChanged={this.onFilterValueChanged}
-            onFilterKeyDown={this.onKeyDown}
             onRowClick={this.onRowClick}
           />
 
@@ -323,125 +322,6 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
 
     const row = this.state.rows[index]
     return row.kind === 'item'
-  }
-
-  private onRowClick = (index: number) => {
-    if (this.props.onItemClick) {
-      const row = this.state.rows[index]
-
-      if (row.kind === 'item') {
-        this.props.onItemClick(row.item)
-      }
-    }
-  }
-
-  private onRowKeyDown = (row: number, event: React.KeyboardEvent<any>) => {
-    const list = this.list
-    if (!list) {
-      return
-    }
-
-    const rowCount = this.state.rows.length
-
-    const firstSelectableRow = findNextSelectableRow(
-      rowCount,
-      { direction: 'down', row: -1 },
-      this.canSelectRow
-    )
-    const lastSelectableRow = findNextSelectableRow(
-      rowCount,
-      { direction: 'up', row: 0 },
-      this.canSelectRow
-    )
-
-    let shouldFocus = false
-
-    if (event.key === 'ArrowUp' && row === firstSelectableRow) {
-      shouldFocus = true
-    } else if (event.key === 'ArrowDown' && row === lastSelectableRow) {
-      shouldFocus = true
-    }
-
-    if (shouldFocus) {
-      const textBox = this.filterTextBox
-
-      if (textBox) {
-        event.preventDefault()
-        textBox.focus()
-      }
-    }
-  }
-
-  private onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const list = this.list
-    const key = event.key
-
-    if (!list) {
-      return
-    }
-
-    if (this.props.onFilterKeyDown) {
-      this.props.onFilterKeyDown(event)
-    }
-
-    if (event.defaultPrevented) {
-      return
-    }
-
-    const rowCount = this.state.rows.length
-
-    if (key === 'ArrowDown') {
-      if (rowCount > 0) {
-        const selectedRow = findNextSelectableRow(
-          rowCount,
-          { direction: 'down', row: -1 },
-          this.canSelectRow
-        )
-        if (selectedRow != null) {
-          this.setState({ selectedRow }, () => {
-            list.focus()
-          })
-        }
-      }
-
-      event.preventDefault()
-    } else if (key === 'ArrowUp') {
-      if (rowCount > 0) {
-        const selectedRow = findNextSelectableRow(
-          rowCount,
-          { direction: 'up', row: 0 },
-          this.canSelectRow
-        )
-        if (selectedRow != null) {
-          this.setState({ selectedRow }, () => {
-            list.focus()
-          })
-        }
-      }
-
-      event.preventDefault()
-    } else if (key === 'Enter') {
-      // no repositories currently displayed, bail out
-      if (rowCount === 0) {
-        return event.preventDefault()
-      }
-
-      const filterText = this.props.filterText
-
-      if (filterText !== undefined && !/\S/.test(filterText)) {
-        return event.preventDefault()
-      }
-
-      const row = findNextSelectableRow(
-        rowCount,
-        { direction: 'down', row: -1 },
-        this.canSelectRow
-      )
-
-      if (row) {
-        this.onRowClick(row)
-      }
-    }
   }
 }
 
