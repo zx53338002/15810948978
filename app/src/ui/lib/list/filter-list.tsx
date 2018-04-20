@@ -6,7 +6,7 @@ import {
   SelectionSource as ListSelectionSource,
   findNextSelectableRow,
 } from '../../lib/list'
-import { TextBox } from '../../lib/text-box'
+import { FilterTextBox } from './filter-text-box'
 import { Row } from '../../lib/row'
 
 import { match, IMatch } from '../../../lib/fuzzy-find'
@@ -147,7 +147,7 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
   IFilterListState<T>
 > {
   private list: List | null = null
-  private filterTextBox: TextBox | null = null
+  private filterTextBox: FilterTextBox | null = null
 
   public constructor(props: IFilterListProps<T>) {
     super(props)
@@ -204,16 +204,16 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
         {this.props.renderPreList ? this.props.renderPreList() : null}
 
         <Row className="filter-field-row">
-          <TextBox
+          <FilterTextBox
             ref={this.onTextBoxRef}
-            type="search"
-            autoFocus={true}
-            placeholder="Filter"
-            className="filter-list-filter-field"
-            onValueChanged={this.onFilterValueChanged}
-            onKeyDown={this.onKeyDown}
-            value={this.props.filterText}
+            rowCount={this.state.rows.length}
+            canSelectRow={this.canSelectRow}
+            onMoveToRow={this.onMoveToRow}
+            filterText={this.props.filterText}
             disabled={this.props.disabled}
+            onFilterTextChanged={this.onFilterValueChanged}
+            onFilterKeyDown={this.onKeyDown}
+            onItemClick={this.onItemClick}
           />
 
           {this.props.renderPostFilter ? this.props.renderPostFilter() : null}
@@ -248,6 +248,33 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
     }
   }
 
+  private onMoveToRow = (direction: 'down' | 'up', currentRow: number) => {
+    const rowCount = this.state.rows.length
+
+    const selectedRow = findNextSelectableRow(
+      rowCount,
+      { direction, row: currentRow },
+      this.canSelectRow
+    )
+    if (selectedRow != null) {
+      this.setState({ selectedRow }, () => {
+        if (this.list != null) {
+          this.list.focus()
+        }
+      })
+    }
+  }
+
+  private onItemClick = (index: number) => {
+    if (this.props.onItemClick) {
+      const row = this.state.rows[index]
+
+      if (row.kind === 'item') {
+        this.props.onItemClick(row.item)
+      }
+    }
+  }
+
   private renderRow = (index: number) => {
     const row = this.state.rows[index]
     if (row.kind === 'item') {
@@ -259,7 +286,7 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
     }
   }
 
-  private onTextBoxRef = (component: TextBox | null) => {
+  private onTextBoxRef = (component: FilterTextBox | null) => {
     this.filterTextBox = component
   }
 
