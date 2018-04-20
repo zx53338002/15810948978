@@ -207,12 +207,11 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
           <FilterTextBox
             ref={this.onTextBoxRef}
             rowCount={this.state.rows.length}
-            canSelectRow={this.canSelectRow}
             onMoveToRow={this.onMoveToRow}
             filterText={this.props.filterText}
             disabled={this.props.disabled}
             onFilterTextChanged={this.onFilterValueChanged}
-            onRowClick={this.onRowClick}
+            onSelectFirstRow={this.onSelectFirstRow}
           />
 
           {this.props.renderPostFilter ? this.props.renderPostFilter() : null}
@@ -249,6 +248,20 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
   private onFocusTextBox = () => {
     if (this.filterTextBox != null) {
       this.filterTextBox.focus()
+    }
+  }
+
+  private onSelectFirstRow = () => {
+    const rowCount = this.state.rows.length
+
+    const selectedRow = findNextSelectableRow(
+      rowCount,
+      { direction: 'down', row: -1 },
+      this.canSelectRow
+    )
+
+    if (selectedRow != null) {
+      this.onRowClick(selectedRow)
     }
   }
 

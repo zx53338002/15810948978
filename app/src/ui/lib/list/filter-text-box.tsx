@@ -2,9 +2,10 @@ import * as React from 'react'
 
 import { TextBox } from '../../lib/text-box'
 
-import { findNextSelectableRow, SelectionDirection } from '../../lib/list'
+import { SelectionDirection } from '../../lib/list'
 
 interface IFilterTextBoxProps {
+  /** The number of rows in the current filtered list */
   readonly rowCount: number
 
   /** The current filter text to use in the form */
@@ -18,9 +19,7 @@ interface IFilterTextBoxProps {
    * chance to respond or cancel the default behavior by calling
    * `preventDefault()`.
    */
-  readonly onFilterKeyDown?: (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => void
+  readonly onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
 
   /**
    * Whether or not the filter list should allow selection
@@ -28,16 +27,14 @@ interface IFilterTextBoxProps {
    */
   readonly disabled?: boolean
 
-  readonly canSelectRow: (index: number) => boolean
-
   /** Called when an item should be focused in the filtered list. */
   readonly onMoveToRow: (
     direction: SelectionDirection,
     currentRow: number
   ) => void
 
-  /** Called when an item is clicked. */
-  readonly onRowClick: (index: number) => void
+  /** Called when the parent component should choose the default entry in the filtered list. */
+  readonly onSelectFirstRow: () => void
 }
 
 /** A List which includes the ability to filter based on its contents. */
@@ -85,8 +82,8 @@ export class FilterTextBox extends React.Component<IFilterTextBoxProps, {}> {
   private onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const key = event.key
 
-    if (this.props.onFilterKeyDown) {
-      this.props.onFilterKeyDown(event)
+    if (this.props.onKeyDown) {
+      this.props.onKeyDown(event)
     }
 
     if (event.defaultPrevented) {
@@ -119,14 +116,8 @@ export class FilterTextBox extends React.Component<IFilterTextBoxProps, {}> {
         return event.preventDefault()
       }
 
-      const row = findNextSelectableRow(
-        rowCount,
-        { direction: 'down', row: -1 },
-        this.props.canSelectRow
-      )
-
-      if (row && this.props.onRowClick) {
-        this.props.onRowClick(row)
+      if (this.props.onSelectFirstRow) {
+        this.props.onSelectFirstRow()
       }
     }
   }
