@@ -34,7 +34,7 @@ interface IFilterTextBoxProps {
   readonly onMoveToRow: (direction: 'up' | 'down', currentRow: number) => void
 
   /** Called when an item is clicked. */
-  readonly onItemClick?: (index: number) => void
+  readonly onRowClick: (index: number) => void
 }
 
 /** A List which includes the ability to filter based on its contents. */
@@ -122,15 +122,9 @@ export class FilterTextBox extends React.Component<IFilterTextBoxProps, {}> {
         this.props.canSelectRow
       )
 
-      if (row) {
-        this.onRowClick(row)
+      if (row && this.props.onRowClick) {
+        this.props.onRowClick(row)
       }
-    }
-  }
-
-  private onRowClick = (index: number) => {
-    if (this.props.onItemClick) {
-      this.props.onItemClick(index)
     }
   }
 }

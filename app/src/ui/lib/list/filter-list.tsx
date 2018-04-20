@@ -213,7 +213,7 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
             disabled={this.props.disabled}
             onFilterTextChanged={this.onFilterValueChanged}
             onFilterKeyDown={this.onKeyDown}
-            onItemClick={this.onItemClick}
+            onRowClick={this.onRowClick}
           />
 
           {this.props.renderPostFilter ? this.props.renderPostFilter() : null}
@@ -265,7 +265,7 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
     }
   }
 
-  private onItemClick = (index: number) => {
+  private onRowClick = (index: number) => {
     if (this.props.onItemClick) {
       const row = this.state.rows[index]
 
