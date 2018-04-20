@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { TextBox } from '../../lib/text-box'
 
-import { findNextSelectableRow } from '../../lib/list'
+import { findNextSelectableRow, SelectionDirection } from '../../lib/list'
 
 interface IFilterTextBoxProps {
   readonly rowCount: number
@@ -31,7 +31,10 @@ interface IFilterTextBoxProps {
   readonly canSelectRow: (index: number) => boolean
 
   /** Called when an item should be focused in the filtered list. */
-  readonly onMoveToRow: (direction: 'up' | 'down', currentRow: number) => void
+  readonly onMoveToRow: (
+    direction: SelectionDirection,
+    currentRow: number
+  ) => void
 
   /** Called when an item is clicked. */
   readonly onRowClick: (index: number) => void
