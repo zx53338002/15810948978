@@ -2,11 +2,11 @@ import * as React from 'react'
 import * as classnames from 'classnames'
 
 import {
-  List,
   SelectionSource as ListSelectionSource,
   findNextSelectableRow,
 } from '../../lib/list'
 import { FilterTextBox } from './filter-text-box'
+import { FilterResults } from './filter-results'
 import { Row } from '../../lib/row'
 
 import { match, IMatch } from '../../../lib/fuzzy-find'
@@ -146,7 +146,7 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
   IFilterListProps<T>,
   IFilterListState<T>
 > {
-  private list: List | null = null
+  private list: FilterResults | null = null
   private filterTextBox: FilterTextBox | null = null
 
   public constructor(props: IFilterListProps<T>) {
@@ -229,15 +229,14 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
       return this.props.renderNoItems()
     } else {
       return (
-        <List
+        <FilterResults
           ref={this.onListRef}
           rowCount={this.state.rows.length}
-          rowRenderer={this.renderRow}
+          renderRow={this.renderRow}
+          onFocusTextBox={this.onFocusTextBox}
           rowHeight={this.props.rowHeight}
           selectedRows={[this.state.selectedRow]}
           onSelectedRowChanged={this.onSelectedRowChanged}
-          onRowClick={this.onRowClick}
-          onRowKeyDown={this.onRowKeyDown}
           canSelectRow={this.canSelectRow}
           invalidationProps={{
             ...this.props,
@@ -245,6 +244,12 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
           }}
         />
       )
+    }
+  }
+
+  private onFocusTextBox = () => {
+    if (this.filterTextBox != null) {
+      this.filterTextBox.focus()
     }
   }
 
@@ -290,7 +295,7 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
     this.filterTextBox = component
   }
 
-  private onListRef = (instance: List | null) => {
+  private onListRef = (instance: FilterResults | null) => {
     this.list = instance
   }
 
