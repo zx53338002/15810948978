@@ -25,7 +25,6 @@ interface ISelectRowAction {
   readonly wrap?: boolean
 }
 
-<<<<<<< HEAD
 /**
  * Interface describing a user initiated selection change event
  * originating from a pointer device clicking or pressing on an item.
