@@ -245,7 +245,11 @@ export class FilterList<T extends IFilterListItem> extends React.Component<
 
   public selectFirstItem(focus: boolean = false) {
     if (this.list !== null) {
-      const next = this.list.nextSelectableRow('down', -1)
+      const next = findNextSelectableRow(
+        this.state.rows.length,
+        { direction: 'down', row: -1 },
+        this.canSelectRow
+      )
 
       if (next !== null) {
         this.setState({ selectedRow: next })
