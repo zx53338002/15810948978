@@ -10,6 +10,7 @@ import {
   SelectionDirection,
   IMouseClickSource,
   IKeyboardSource,
+  ISelectAllSource,
 } from './selection'
 import { createUniqueId, releaseUniqueId } from '../../lib/id-pool'
 import { range } from '../../../lib/range'
