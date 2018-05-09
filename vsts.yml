@@ -20,6 +20,10 @@ phases:
   - script: |
        yarn package
     name: Package
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: 'temp/**.xml'
+    condition: succeededOrFailed()
 
 - phase: Linux
   queue: Hosted Linux Preview
@@ -48,6 +52,10 @@ phases:
   - script: |
        yarn package
     name: Package
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: 'temp/**.xml'
+    condition: succeededOrFailed()
 
 - phase: macOS
   queue: Hosted macOS Preview
@@ -70,4 +78,7 @@ phases:
   - script: |
       yarn package
     name: Package
-
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: 'temp/**.xml'
+    condition: succeededOrFailed()
