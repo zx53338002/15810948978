@@ -42,6 +42,11 @@ const electronMochaArgs = [
   // timeout for 10s
   '-t',
   '10000',
+  // reporting options
+  '--reporter',
+  'mocha-junit-reporter',
+  '--reporter-options',
+  'mochaFile=temp/unit-tests.xml',
   // ensure tests are run within a renderer process
   '--renderer',
   '--require',
