@@ -19,7 +19,7 @@ const tslintPath = Path.join(repositoryRoot, 'node_modules', '.bin', tslint)
 
 const tslintArgs = [
   './{script,tslint-rules}/*.ts',
-  './app/{src,typings,test}/**/*.{ts,tsx}',
+  './app/{src,test}/**/*.{ts,tsx}',
 ]
 
 const { status } = spawnSync(tslintPath, tslintArgs, options)

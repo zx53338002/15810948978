@@ -17,7 +17,7 @@ const report = eslint.executeOnFiles([
   './{script,eslint-rules}/**/*.{j,t}s?(x)',
   './tslint-rules/**/*.ts',
   './app/*.js',
-  './app/{src,typings,test}/**/*.{j,t}s?(x)',
+  './app/{src,test}/**/*.{j,t}s?(x)',
   './changelog.json',
 ])
 
